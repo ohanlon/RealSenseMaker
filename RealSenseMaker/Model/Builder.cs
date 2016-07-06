@@ -12,6 +12,7 @@ namespace RealSenseMaker.Model
       SdkFolders folders = new SdkFolders(realsenseFolder);
       GetAndCopy(folders.X64, @"Libs\x64", directory);
       GetAndCopy(folders.X86, @"Libs\x86", directory);
+      GetAndCopy(folders.X86, @"Libs\AnyCPU", directory);
     }
 
     private static void GetAndCopy(string source, string destination, string directory)
@@ -19,13 +20,17 @@ namespace RealSenseMaker.Model
       destination = Path.Combine(directory, destination);
       Directory.CreateDirectory(destination);
       string path1 = Path.Combine(source, ManagedFile);
-      if (File.Exists(Path.Combine(destination, ManagedFile)))
+      string destinationFile = Path.Combine(destination, ManagedFile);
+      string unmanagedFile = Path.Combine(destination, UnmanagedFile);
+      if (File.Exists(destinationFile))
       {
-        return;
+        // We're going to overwrite the file here.
+        File.Delete(destinationFile);
+        File.Delete(unmanagedFile);
       }
-      File.Copy(path1, Path.Combine(destination, ManagedFile));
+      File.Copy(path1, destinationFile);
       string path2 = Path.Combine(source, UnmanagedFile);
-      File.Copy(path2, Path.Combine(destination, UnmanagedFile));
+      File.Copy(path2, unmanagedFile);
     }
   }
 }

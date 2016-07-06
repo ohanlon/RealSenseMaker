@@ -30,15 +30,12 @@ namespace RealSenseMaker.Model
       string text = GetSolutionContents(fileText, Debug);
       text = GetSolutionContents(text, Release);
       // Now, it's time to iterate over the files...
-      foreach (var guid in guidMaps)
+      foreach (string guidMapping in guidMaps.Values)
       {
-        foreach (string guidMapping in guidMaps.Values)
-        {
-          text = GetActiveConfig(text, guidMapping, Debug, "ActiveCfg");
-          text = GetActiveConfig(text, guidMapping, Debug, "Build.0");
-          text = GetActiveConfig(text, guidMapping, Release, "ActiveCfg");
-          text = GetActiveConfig(text, guidMapping, Release, "Build.0");
-        }
+        text = GetActiveConfig(text, guidMapping, Debug, "ActiveCfg");
+        text = GetActiveConfig(text, guidMapping, Debug, "Build.0");
+        text = GetActiveConfig(text, guidMapping, Release, "ActiveCfg");
+        text = GetActiveConfig(text, guidMapping, Release, "Build.0");
       }
       File.WriteAllText(solution, text);
     }
